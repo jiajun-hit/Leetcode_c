@@ -5,4 +5,4 @@ I have just solved a portion of the problems. It gives me a lot of fun.
 below is the problems I have soved
 
 ## the lastest soved problem is:
-- [x] 5
+- [x] 27
