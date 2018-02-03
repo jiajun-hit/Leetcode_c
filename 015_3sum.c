@@ -95,7 +95,7 @@ int** threeSum(int* nums, int numsSize, int* returnSize) {
                 k_start = j+1;
             }
 
-            for (int k = k_start; k < numsSize; k++) {
+            for (int k = numsSize-1; k >= k_start; k--) {
                 if (nums[i] + nums[j] + nums[k] == 0) {
                     (*returnSize)++;
                     results = (int**)realloc(results, (*returnSize) * sizeof(int*));
@@ -104,6 +104,10 @@ int** threeSum(int* nums, int numsSize, int* returnSize) {
                     results[*returnSize - 1][0] = nums[i];
                     results[*returnSize - 1][1] = nums[j];
                     results[*returnSize - 1][2] = nums[k];
+                    break;
+                }
+
+                if (nums[i] + nums[j] + nums[k] < 0) {
                     break;
                 }
             }
@@ -115,7 +119,7 @@ int** threeSum(int* nums, int numsSize, int* returnSize) {
 
 int main() {
     int resultSize = 0;
-    int a[] = {0,0};
+    int a[] = {1,-1,8,0,2,0,3,0,-12,-3,4,2,5};
     int* nums = a;
     int **results = NULL;
 
