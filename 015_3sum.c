@@ -42,73 +42,51 @@ int** threeSum(int* nums, int numsSize, int* returnSize) {
     // sort the numbers
     quickSort(nums, 0, numsSize-1);
 
-    // the index of first positive number
-    int zero_index_r = numsSize;
-    for (int i = numsSize-1; i >= 0; i--) {
-        if (nums[i] <= 0) {
-            zero_index_r = i + 1;
-            break;
-        }
-    }
-
-    // when there are three 0, it should be treated specially
-    if (nums[zero_index_r-1] == 0 && zero_index_r > 2) {
-        if (nums[zero_index_r-2] == 0 && nums[zero_index_r-3] ==0) {
-            (*returnSize)++;
-            results = (int **)malloc(sizeof(int*));
-            results[0] = (int *)malloc(3 * sizeof(int));
-            results[0][0] = 0;
-            results[0][1] = 0;
-            results[0][2] = 0;
-        }
-    }
-
     for (int i = 0; i < numsSize-2; i++) {
         if (nums[i] > 0) {
             break;
         }
 
-        // to avoid repeat of the first numbers
-        if (i > 0){
-            while(nums[i] == nums[i-1]) {
-                i++;
-            }
-        }
+        int j = i + 1;
+        int k = numsSize -1;
+        int sum = 0;
 
-        for (int j = i + 1; j < numsSize-1; j++) {
-            // to avoid repeat of the second numbers
-            if(nums[j] != nums[i]){
-                while(nums[j] == nums[j-1]) {
-                    j++;
+        while (j > i && j < k) {
+            sum = nums[i] + nums[j] + nums[k];
+
+            if (sum == 0) {
+                int already_exist = 0;
+                int index = *returnSize - 1;
+
+                while(index >= 0 && results[index][0] == nums[i]) {
+                    if (results[index][1] == nums[j]) {
+                        already_exist = 1;
+                        break;
+                    } else {
+                        index--;
+                    }
                 }
-            } else {
-                while(nums[j] == nums[j-1]) {
-                    j++;
-                }
-                j--;
-            }
 
-            // set the start index of the largest num, to reduce the loops
-            int k_start = zero_index_r;
-            if (zero_index_r <= j)
-            {
-                k_start = j+1;
-            }
-
-            for (int k = numsSize-1; k >= k_start; k--) {
-                if (nums[i] + nums[j] + nums[k] == 0) {
-                    (*returnSize)++;
+                if (!already_exist) {
+                    *returnSize += 1;
                     results = (int**)realloc(results, (*returnSize) * sizeof(int*));
                     results[*returnSize - 1] = (int *)malloc(3 * sizeof(int));
 
                     results[*returnSize - 1][0] = nums[i];
                     results[*returnSize - 1][1] = nums[j];
                     results[*returnSize - 1][2] = nums[k];
-                    break;
                 }
 
-                if (nums[i] + nums[j] + nums[k] < 0) {
-                    break;
+                j++;
+                while (j < k && nums[j] == nums[j-1]) {
+                    j++;
+                }
+            } else if (sum > 0) {
+                k--;
+            } else {
+                j++;
+                while (j < k && nums[j] == nums[j-1]) {
+                    j++;
                 }
             }
         }
@@ -119,7 +97,7 @@ int** threeSum(int* nums, int numsSize, int* returnSize) {
 
 int main() {
     int resultSize = 0;
-    int a[] = {1,-1,8,0,2,0,3,0,-12,-3,4,2,5};
+    int a[] = {-4,-2,-2,-2,0,1,2,2,2,3,3,4,4,6,6};
     int* nums = a;
     int **results = NULL;
 
